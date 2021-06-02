@@ -1,0 +1,16 @@
+{
+   "Movies":[
+      {
+         "movie_name":"TARZAN TEST",
+         "reviews":["GOOD", "BAD", "UGLY"]
+      },
+      {
+         "movie_name":"Tarzan and the jungle",
+         "reviews":["2", "2", "2"]
+      },
+      {
+         "movie_name":"movie tarzan",
+         "reviews":["3", "3", "3"]
+      }
+   ]
+}
