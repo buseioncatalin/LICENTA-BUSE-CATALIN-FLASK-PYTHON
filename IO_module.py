@@ -91,7 +91,6 @@ def get_movie_reviews_list(name):
 
 def app_running():
     print("Welcome. \n")
-    search_for_movie()
     reviews = []
     while(1):
         actual_movie_name = search_for_movie()
