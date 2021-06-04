@@ -111,3 +111,25 @@ def app_running():
 app_running()
 
 <form method="POST" action="/search"><input name="movie_name" placeholder="Type in name of the movie"/><input type="submit" value="Search"/></form>
+
+
+,
+      {
+         "movie_name": "",
+         "reviews": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""]
+      }
+
+# #### LOAD JSON FILE #####
+with open('/home/Catalin147/mysite/data.json') as f:
+    JSON_FILE = json.load(f)
+# #########################
