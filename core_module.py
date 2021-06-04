@@ -15,11 +15,14 @@ with open('data.json') as f:
 
 
 class Returns:
-    def __init__(self, display_type="", display_textblob="", display_vader="", display_extra=""):
+    def __init__(self, display_type="", display_textblob="", display_vader="", display_extra="", display_img="/static/",
+                 display_name=""):
         self.type = display_type
         self.textblob = display_textblob
         self.vader = display_vader
         self.extra = display_extra
+        self.image_path = display_img
+        self.name = display_name
 # #########################
 
 # ANALYSING THE GIVEN TEXT WITH TEXTBLOB
@@ -195,13 +198,20 @@ def run_on_search(user_input):
         return_to_flask_vader += "<h4> {} Positives, {} Negatives and {} Neutrals " \
                                  "</h4>".format(vader_positives, vader_negatives, vader_neutrals)
 
+        image_path = actual_movie_name
+        image_path = image_path.replace(" ", "-")
+
         flask_returns.textblob = return_to_flask_textblob
         flask_returns.vader = return_to_flask_vader
+
+        flask_returns.image_path = flask_returns.image_path + image_path + ".jpg"
+        flask_returns.name = actual_movie_name
 
     elif okay == "Multiple":
         flask_returns.extra = "We found multiple movies with similar names. " \
                           "Please check the list and write again the exact name. <br>"
         list_of_names = search_result
+        list_of_names.sort()
         for i in list_of_names:
             flask_returns.extra = flask_returns.extra + i + "<br>"
 
