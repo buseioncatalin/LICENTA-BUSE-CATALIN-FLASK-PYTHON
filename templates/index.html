@@ -15,6 +15,17 @@ background: -webkit-linear-gradient(to left, #3c1053, #ad5389);  /* Chrome 10-25
 background: linear-gradient(to left, #3c1053, #ad5389); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
+.container_output_content{
+
+}
+
+.container_navbar{
+
+}
+
+.container_footer{
+
+}
 
 </style>
 
@@ -26,7 +37,8 @@ background: linear-gradient(to left, #3c1053, #ad5389); /* W3C, IE 10+/ Edge, Fi
 <!--  -->
 <!--  -->
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<div class="container_navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="#">Buse Catalin</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -47,9 +59,12 @@ background: linear-gradient(to left, #3c1053, #ad5389); /* W3C, IE 10+/ Edge, Fi
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
     </ul>
-    
+
   </div>
 </nav>
+</div>
+
+
 
 
 
@@ -59,8 +74,55 @@ background: linear-gradient(to left, #3c1053, #ad5389); /* W3C, IE 10+/ Edge, Fi
 
 <p>My first paragraph.</p>
 
-<p>{{ my_output | safe }}</p>
+<div class = "container-md" id="container_output_content">
 
+	<div class="row">
+
+		<div class="col" id="coloane_content">
+			<div class="card">
+				<div class="card-body">
+
+					<div class="row">
+
+					<div class="col-2">
+
+						<img src="{{ image_path|safe }}" alt="{{ name_of_movie }}" style="width:200px;height: 320px;">
+
+					</div>
+
+					<div class="col-10">
+
+					<div class="row">
+						<div class="col">
+							<h1> {{ name_of_movie }} </h1>
+						</div>
+
+
+					</div>
+
+
+					<div class="row">
+						<div class="col">
+                            {{ extra_out|safe }}
+                            {{ textblob_out|safe }}
+                            {{ vader_out|safe }}
+						</div>
+					</div>
+
+
+					</div>
+
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
+
+
+</div>
+</div>
 
 
 
@@ -69,7 +131,8 @@ background: linear-gradient(to left, #3c1053, #ad5389); /* W3C, IE 10+/ Edge, Fi
 
 
 <!-- FOOTER -->
-<footer class="bg-dark text-center text-white fixed-bottom">
+<div class="container_footerr">
+    <footer class="bg-dark text-center text-white fixed-bottom">
   <!-- Grid container -->
   <div class="container p-4 pb-0">
     <!-- Section: Social media -->
@@ -111,7 +174,9 @@ background: linear-gradient(to left, #3c1053, #ad5389); /* W3C, IE 10+/ Edge, Fi
   </div>
   <!-- Copyright -->
 </footer>
+</div>
 
+<!-- SCRIPTS -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

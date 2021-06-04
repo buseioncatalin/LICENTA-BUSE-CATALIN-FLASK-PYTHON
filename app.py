@@ -5,14 +5,15 @@ app = Flask(__name__)
 
 input_name = ""
 
-# @app.route('/')
-# def hello_world():
-#     return 'Hello World!'
-
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    out = "Hello. Not sure if you should watch a certain movie? <br> Enter the name here. Using the best 2 Sentiment " \
+          "Analysis " \
+        "libraries (TextBlob and VaderSentiment), we will check the 10 top rated IMDB reviews so you can see if the " \
+        "movie is perceived as good or bad. The more Positive results there are, the better."
+    return render_template("index.html", image_path="/static/question.png", name_of_movie="Search for a movie name!",
+                           extra_out=out)
 
 
 @app.route('/about.html')
@@ -34,12 +35,15 @@ def search():
     raw_display = core_module.run_on_search(input_name)
 
     if raw_display.type == "One":
-        to_print = str(raw_display.extra) + str(raw_display.textblob) + str(raw_display.vader)
-        return render_template("index.html", my_output=to_print)
+        return render_template("index.html", image_path=raw_display.image_path, name_of_movie=raw_display.name,
+                               extra_out=raw_display.extra, textblob_out=raw_display.textblob,
+                               vader_out=raw_display.vader)
     elif raw_display.type == "None":
-        return render_template("index.html", my_output=str(raw_display.extra))
+        return render_template("index.html", image_path="/static/image-not-found.jpg", name_of_movie="Movie not found",
+                               extra_out=raw_display.extra)
     elif raw_display.type == "Multiple":
-        return render_template("index.html", my_output=str(raw_display.extra))
+        return render_template("index.html", image_path="/static/question.png", name_of_movie="Multiple entries",
+                               extra_out=raw_display.extra)
 
 
 if __name__ == '__main__':
