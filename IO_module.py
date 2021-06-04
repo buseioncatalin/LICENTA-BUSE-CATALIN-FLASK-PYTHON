@@ -109,3 +109,5 @@ def app_running():
 # create_list_of_names()
 
 app_running()
+
+<form method="POST" action="/search"><input name="movie_name" placeholder="Type in name of the movie"/><input type="submit" value="Search"/></form>

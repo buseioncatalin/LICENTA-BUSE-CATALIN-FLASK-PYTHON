@@ -1,14 +1,25 @@
 from textblob import TextBlob
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import json
 
 # ####      GLOBALS   #####
 okay = None
-return_to_flask = ""
 # #########################
 
 # #### LOAD JSON FILE #####
 with open('data.json') as f:
     JSON_FILE = json.load(f)
+# #########################
+
+# #####    OBJECTS    #####
+
+
+class Returns:
+    def __init__(self, display_type="", display_textblob="", display_vader="", display_extra=""):
+        self.type = display_type
+        self.textblob = display_textblob
+        self.vader = display_vader
+        self.extra = display_extra
 # #########################
 
 # ANALYSING THE GIVEN TEXT WITH TEXTBLOB
@@ -30,6 +41,7 @@ def rank_textblob_score(textblob_score):
         polarity = "Neutral"
     else:
         polarity = "Positive"
+
     return polarity
 # #########################
 
@@ -38,7 +50,9 @@ def rank_textblob_score(textblob_score):
 
 
 def analysis_vadersentiment(text_to_analyse):
-    pass
+    analyser = SentimentIntensityAnalyzer()
+    result = analyser.polarity_scores(text_to_analyse)
+    return result["compound"]
 # #########################
 
 
@@ -46,7 +60,14 @@ def analysis_vadersentiment(text_to_analyse):
 
 
 def rank_vader_score(vader_score):
-    pass
+    if vader_score >= 0.5:
+        polarity = "Positive"
+    elif vader_score <= -0.5:
+        polarity = "Negative"
+    else:
+        polarity = "Neutral"
+
+    return polarity
 # #########################
 
 
@@ -82,7 +103,7 @@ def search_for_movie(movie_keyword):
     movie_name_list = create_list_of_names()
     results = []
     for i in movie_name_list:
-        if movie_keyword in i.lower():
+        if movie_keyword.lower() in i.lower():
             results.append(i)
 
     return results
@@ -117,31 +138,74 @@ def check_similarities(results):
 
 
 def run_on_search(user_input):
+
     print("Welcome. \n")
 
-    global return_to_flask
-
+    return_to_flask_textblob = "According to TextBlob, we got the following results for this movie: <br>"
+    return_to_flask_vader = "According to VaderSentiment, we got the following results for this movie: <br>"
     movie_list = search_for_movie(user_input)
     search_result = check_similarities(movie_list)
 
+    flask_returns = Returns()
+
     if okay == "None":
-        return_to_flask = "No movie names contained this keyword. Try again.\n"
+        flask_returns.extra = "No movie names contained this keyword. Try again. <br>"\
 
     elif okay == "One":
-        return_to_flask = ""
         actual_movie_name = search_result
+        flask_returns.extra = "Results for movie " + str(actual_movie_name) + ": <br>"
 
         reviews = get_movie_reviews_list(actual_movie_name)
 
+        textblob_positives = 0
+        textblob_negatives = 0
+        textblob_neutrals = 0
+
+        vader_positives = 0
+        vader_negatives = 0
+        vader_neutrals = 0
+
         for i in reviews:
-            to_add = str(rank_textblob_score(analysis_textblob(i)))
-            return_to_flask = return_to_flask + to_add + "<br>"
+
+            to_check = rank_textblob_score(analysis_textblob(i))
+
+            if to_check == "Positive":
+                textblob_positives += 1
+            elif to_check == "Negative":
+                textblob_negatives += 1
+            elif to_check == "Neutral":
+                textblob_neutrals += 1
+
+            to_check = rank_vader_score(analysis_vadersentiment(i))
+
+            if to_check == "Positive":
+                vader_positives += 1
+            elif to_check == "Negative":
+                vader_negatives += 1
+            elif to_check == "Neutral":
+                vader_neutrals += 1
+
+        total = textblob_neutrals + textblob_negatives + textblob_positives
+
+        return_to_flask_textblob += "Out of " + str(total) + " reviews, we got: <br>"
+        return_to_flask_textblob += "<h4> {} Positives, {} Negatives and {} Neutrals " \
+                                    "</h4>".format(textblob_positives, textblob_negatives, textblob_neutrals)
+
+        return_to_flask_vader += "Out of " + str(total) + " reviews, we got: <br>"
+        return_to_flask_vader += "<h4> {} Positives, {} Negatives and {} Neutrals " \
+                                 "</h4>".format(vader_positives, vader_negatives, vader_neutrals)
+
+        flask_returns.textblob = return_to_flask_textblob
+        flask_returns.vader = return_to_flask_vader
 
     elif okay == "Multiple":
-        return_to_flask = "We found multiple movies with similar names. Please check and write again the exact name. <br>"
+        flask_returns.extra = "We found multiple movies with similar names. " \
+                          "Please check the list and write again the exact name. <br>"
         list_of_names = search_result
         for i in list_of_names:
-            return_to_flask = return_to_flask + i + "<br>"
+            flask_returns.extra = flask_returns.extra + i + "<br>"
 
-    return return_to_flask
+    flask_returns.type = okay
+
+    return flask_returns
 # #########################

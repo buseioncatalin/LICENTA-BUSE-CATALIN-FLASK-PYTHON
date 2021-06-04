@@ -30,7 +30,16 @@ def search():
     global input_name
     input_name = request.form['movie_name']
     print(input_name)
-    return core_module.run_on_search(input_name)
+
+    raw_display = core_module.run_on_search(input_name)
+
+    if raw_display.type == "One":
+        to_print = str(raw_display.extra) + str(raw_display.textblob) + str(raw_display.vader)
+        return render_template("index.html", my_output=to_print)
+    elif raw_display.type == "None":
+        return render_template("index.html", my_output=str(raw_display.extra))
+    elif raw_display.type == "Multiple":
+        return render_template("index.html", my_output=str(raw_display.extra))
 
 
 if __name__ == '__main__':
